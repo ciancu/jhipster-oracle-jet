@@ -70,10 +70,10 @@
 
         <!-- Sonar properties -->
         <sonar.host.url>http://localhost:9001</sonar.host.url>
-        <sonar.exclusions>src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, target/www/**/*.*</sonar.exclusions>
-        <sonar.issue.ignore.multicriteria>S3437,S4502,S4684,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
+        <sonar.exclusions>src/main/webapp-ojet/src/test/**/*.*, src/main/webapp-ojet/scripts/**/*.*, target/www/**/*.*</sonar.exclusions>
+        <sonar.issue.ignore.multicriteria>S3437,S4684,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
         <!-- Rule https://sonarcloud.io/coding_rules?open=Web%3ABoldAndItalicTagsCheck&rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/ -->
-        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>src/main/webapp/app/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
+        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>src/main/webapp-ojet/src/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
         <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>Web:BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS3437&rule_key=squid%3AS3437 is ignored, as a JPA-managed field cannot be transient -->
         <sonar.issue.ignore.multicriteria.S3437.resourceKey>src/main/java/**/*</sonar.issue.ignore.multicriteria.S3437.resourceKey>
@@ -712,10 +712,10 @@
             </properties>
         </profile>
         <profile>
-            <id>webpack</id>
+            <id>ojet</id>
             <activation>
                 <file>
-                    <missing>${basedir}/target/www/app/main.bundle.js</missing>
+                    <missing>${basedir}/target/www/gtw/index.html</missing>
                 </file>
             </activation>
             <dependencies>
@@ -745,20 +745,74 @@
                                 <goals>
                                     <goal>install-node-and-npm</goal>
                                 </goals>
+                                <phase>initialize</phase>
                                 <configuration>
                                     <nodeVersion>${node.version}</nodeVersion>
                                     <npmVersion>${npm.version}</npmVersion>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.3.2</version>
+                        <executions>
                             <execution>
-                                <id>webpack build dev</id>
+                                <id>install-ojet-cli</id>
                                 <goals>
-                                    <goal>npm</goal>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>initialize</phase>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                        <argument>@oracle/ojet-cli</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-ojet-sass</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>initialize</phase>
+                                <configuration>
+                                    <executable>npx</executable>
+                                    <arguments>
+                                        <argument>ojet</argument>
+                                        <argument>add</argument>
+                                        <argument>sass</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run ojet:dev:ecm5</id>
+                                <goals>
+                                    <goal>exec</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build</arguments>
-                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>ojet:dev:ecm5</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run ojet:dev:build</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>ojet:dev:build</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -772,7 +826,7 @@
                             <warSourceDirectory>target/www/</warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory>src/main/webapp-ojet</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -818,7 +872,7 @@
                             <warSourceDirectory>target/www/</warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory>src/main/webapp-ojet</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -863,7 +917,7 @@
                             <warSourceDirectory>target/www/</warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory>src/main/webapp-ojet</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -911,26 +965,53 @@
                                     <arguments>install</arguments>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.3.2</version>
+                        <executions>
                             <execution>
-                                <id>webpack build test</id>
+                                <id>javascript build test</id>
                                 <goals>
-                                    <goal>npm</goal>
+                                    <goal>exec</goal>
                                 </goals>
                                 <phase>test</phase>
                                 <configuration>
-                                    <arguments>run webpack:test</arguments>
-                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>ojet:test:ecm5</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>webpack build prod</id>
+                                <id>javascript build prod ecm5</id>
                                 <goals>
-                                    <goal>npm</goal>
+                                    <goal>exec</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:prod</arguments>
-                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>ojet:prod:ecm5</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>javascript build prod</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>ojet:prod:build</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -993,7 +1074,7 @@
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory>src/main/webapp/</warSourceDirectory>
+                            <warSourceDirectory>src/main/webapp-ojet/</warSourceDirectory>
                         </configuration>
                     </plugin>
                     <plugin>
