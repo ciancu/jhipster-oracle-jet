@@ -10,7 +10,7 @@
       "tests": "tests"
     },
     "staging": {
-      "web": "../../../../target/www/gtw",
+      "web": "../target/www/gtw",
       "hybrid": "hybrid",
       "themes": "themes"
     }
