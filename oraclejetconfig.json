@@ -1,3 +1,20 @@
 {
+  "paths": {
+    "source": {
+      "common": "target/ojet/src",
+      "web": "target/ojet/src-web",
+      "hybrid": "target/ojet/src-hybrid",
+      "javascript": "js",
+      "styles": "css",
+      "themes": "themes",
+      "tests": "tests"
+    },
+    "staging": {
+      "web": "target/www/gtw",
+      "hybrid": "hybrid",
+      "themes": "target/ojet/themes"
+    }
+  },
+  "defaultBrowser": "chrome",
   "generatorVersion": "6.0.2"
 }
