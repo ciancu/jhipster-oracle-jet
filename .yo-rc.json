@@ -1,0 +1,38 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "de.virtual7.gtw",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "5.3.4",
+    "applicationType": "gateway",
+    "baseName": "v7gtw",
+    "packageName": "de.virtual7.gtw",
+    "packageFolder": "de/virtual7/gtw",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "Y2JjNmJkOGY5YWQ1NWM1NjcyZjVkZGQ5NmNiYjc0YTNhY2NhNDdmYjdhOTBkZDJhMTE5ZDc0ZDkxNjhlZTFmMzZjNTJlMTY0OTMzOGJmNmE4Mzc4YjdkZTdjMzhkMTA5Zjc5YTExNjQyZTRiMjQwNmU5MjVmYmVhZjhiMGFhMzU=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "de"
+    ]
+  }
+}
